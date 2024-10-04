@@ -5,89 +5,90 @@
 int knightHealth;
 int goblinHealth = randomNumberGenerator.Next(1, 101);
 string input;
-int attackKnight = randomNumberGenerator.Next(1,21);
-int attackGoblin = randomNumberGenerator.Next(1, 11);
-int heal = randomNumberGenerator.Next(5, 16);
-
 
 Console.Write("Geef de levenspunten van de ridder in: ");
 input = Console.ReadLine();
 bool isValidNumber = int.TryParse(input, out knightHealth);
-if (isValidNumber == true) {
 
-    if(knightHealth <=0 || knightHealth >100)
+
+if (isValidNumber == true)
+{
+
+    if (knightHealth <= 0 || knightHealth > 100)
     {
         Console.WriteLine("Invalid input, default 100 is used");
+        knightHealth = 100;
     }
 }
 
-else
+
+do
 {
-    Console.WriteLine("Invalid input, default 100 is used.");
-        knightHealth = 100;
-}
 
-Console.WriteLine($"Knight health = {knightHealth}");
-Console.WriteLine($"Goblin health = {goblinHealth}");
+    Console.WriteLine($"Knight health = {knightHealth}");
+    Console.WriteLine($"Goblin health = {goblinHealth}");
+    Console.WriteLine();
 
-Console.WriteLine("Choose an action: ");
-Console.WriteLine("1. Attack");
-Console.WriteLine("2. Heal");
-Console.Write("Please select an action: ");
-string action = Console.ReadLine();
+    Console.WriteLine("Available actions:");
+    Console.WriteLine("1. Attack");
+    Console.WriteLine("2. Heal");
+    Console.Write("Please select an action: ");
+    string action = Console.ReadLine();
 
-switch(action)
-{
-    case "1": goblinHealth -= attackKnight;
+
+    int attackKnight = randomNumberGenerator.Next(1, 21);
+    int attackGoblin = randomNumberGenerator.Next(1, 11);
+    int heal = randomNumberGenerator.Next(5, 16);
+
+
+    switch (action)
+    {
+        case "1":
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"You dealt {attackKnight} damage to the goblin");
+            goblinHealth -= attackKnight;
+            Console.ResetColor();
+            break;
+
+        case "2":
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"You healed {heal} hitpoints.");
+            knightHealth += heal;
+            Console.ResetColor();
+            break;
+        default:
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("Invalid input");
+            Console.ResetColor();
+            break;
+    }
+
+
+    if (goblinHealth > 0) 
+    {
+            
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"You dealt {attackKnight} damage to the goblin");
+        Console.WriteLine($"You were attacked by the goblin for {attackGoblin} damage");
+        knightHealth -= attackGoblin;
         Console.ResetColor();
-        break;
+    }
 
-    case "2": knightHealth =+ 10;
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine($"You healed {heal} hitpoints.");
+    if (knightHealth <= 0)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("You lost! You died");
         Console.ResetColor();
-        break;
-    default:
-        Console.ForegroundColor= ConsoleColor.Magenta;
-        Console.WriteLine("Invalid input");
+    }
+
+    if (goblinHealth <= 0)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("You Win! Enemy slayed");
         Console.ResetColor();
-        break;
-}
-
-if (goblinHealth > 0) ;
-{
-    knightHealth -= attackKnight;
-    Console.ForegroundColor = ConsoleColor.Yellow;
-    Console.WriteLine($"You were attacked by the goblin for {attackGoblin} damage");
-    Console.ResetColor();
-}
-
-if (knightHealth <= 0)
-{
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("You died");
-    Console.ResetColor();
-}
-else
-{
-    Console.WriteLine($"Knight health: {knightHealth}");
-}
-
-if (goblinHealth <= 0)
-{
-    Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine("Enemy slayed");
-    Console.ResetColor();
-}
-else
-{
-    Console.WriteLine($"Goblin health: {goblinHealth}");
-}
-
-
+    }   
+    } while (goblinHealth > 0 && knightHealth > 0);
 /* 
+ * 
  * Deel 1
  * 
  * We gaan een applicatie maken waarin de speler als ridder tegen een goblin moet vechten.
